@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var gd = require( '../src/gd.js' );
+
+var config = {
+    jsPath: './js/',
+    buildConfPath: './build.conf'
+};
+
+new gd( config );
