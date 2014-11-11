@@ -34,9 +34,8 @@ gd.prototype = {
     init: function() {
         this._initEvent();
         this.setOnlineJsMap();
-        this.setEnvJsMap( this.config.basePath );
+        this.setEnvJsMap();
         this._writeConfig();
-
     },
 
     _initEvent: function() {
@@ -79,19 +78,7 @@ gd.prototype = {
         var me = this,
             config = this.config;
 
-        var walk = function( dir ) {
-            var dirList = fs.readdirSync( dir );
-
-            dirList.forEach( function( item ) {
-                if ( fs.statSync( path.join( dir, item ) ).isDirectory()) {
-                    walk( path.join( dir, item ) );
-                } else if ( me.filterExtname( item ) ) {
-                    me.envJsMap[ item.replace( /\.js/, '' ) ] = '/' + path.join( dir, item );
-                }
-            } );
-        };
-
-        walk( config.basePath );
+        me._setFilesJsMap( config.basePath, 'envJsMap' );
     },
 
     setOnlineJsMap: function() {
@@ -106,36 +93,80 @@ gd.prototype = {
 
         for ( var key in conf ) {
             var item = conf[ key ];
-            if ( item.files ) {
-                for ( var i = 0, len = item.files.length; i < len; i++ ) {
-                    var subItem = item.files[ i ],
-                        subItemArr = subItem.split( '/' ),
-                        modName = subItemArr[ subItemArr.length - 1 ].replace( /\.js/, '' );
 
-                    me.onlineJsMap[ modName ] = '/' + item.fvName;
-                }
-            }
+            //针对mod文件夹下的模块
+            me._setOnlineModJsMap( item, key );
 
+            //针对pages文件夹下的模块
             if ( key == 'pages' ) {
-                if ( item.pageCombo ) {
 
-                }
+                //如home.js中有其它模块合并进来的情况
+                me._setOnlinePagesJsMap( item );
 
-                var walk = function( dir ) {
-                    var dirList = fs.readdirSync( dir );
-
-                    dirList.forEach( function( item ) {
-                        if ( fs.statSync( path.join( dir, item ) ).isDirectory()) {
-                            walk( path.join( dir, item ) );
-                        } else if ( me.filterExtname( item ) ) {
-                            me.onlineJsMap[ item.replace( /\.js/, '' ) ] = '/pages/' + item;
-                        }
-                    } );
-                };
-
-                walk( item.dir );
+                //pages文件夹下的文件始终都会作为模块引用
+                me._setFilesJsMap( item.dir, 'onlineJsMap' );
             }
         }
+    },
+
+    /**
+     * 设置打包配置中有files数组的jsmap
+     */
+    _setOnlineModJsMap: function( modObj, key ) {
+        var me = this;
+
+        if ( modObj.files ) {
+            var modPath = me._getSr( key, '{pv}', '-{fv}' );
+
+            for ( var i = 0, len = modObj.files.length; i < len; i++ ) {
+                var modName = me._getSr( modObj.files[ i ], '/', '.js' );
+                me.onlineJsMap[ modName ] = modPath;
+            }
+        }
+    },
+
+    /**
+     * 设置打包配置中pages下有pageCombo的jsmap
+     */
+    _setOnlinePagesJsMap: function( confObj ) {
+        var me = this;
+
+        if ( confObj.pageCombo ) {
+            var modPath = me._getSr( confObj.releaseDir, '{pv}' );
+
+            for ( var key in confObj.pageCombo ) {
+                var item = confObj.pageCombo[ key ];
+
+                item.forEach( function( subItem ) {
+                    if ( !/pages/.test( subItem ) ) {
+                        var modName = me._getSr( subItem, '/', '.js' );
+                        me.onlineJsMap[ modName ] = modPath + key;
+                    }
+                } );
+            }
+        }
+    },
+
+    /**
+     * 根据指定目录下的js文件作为独立一个模块
+     * 不涉及到多文件合并
+     */
+    _setFilesJsMap: function( dir, typeJsMap ) {
+        var me = this;
+
+        var walk = function( dir ) {
+            var dirList = fs.readdirSync( dir );
+
+            dirList.forEach( function( item ) {
+                if ( fs.statSync( path.join( dir, item ) ).isDirectory()) {
+                    walk( path.join( dir, item ) );
+                } else if ( me.filterExtname( item ) ) {
+                    me[ typeJsMap ][ item.replace( /\.js/, '' ) ] = '/pages/' + item;
+                }
+            } );
+        };
+
+        walk( dir );
     },
 
     filterExtname: function( name ) {
@@ -144,11 +175,20 @@ gd.prototype = {
         return EXTNAME_REG.test( name );
     },
 
+    /**
+     * 获取先通过split分割然后通过replace替换后的字符串
+     * replaceStr 可选
+     */
+    _getSr: function( oriStr, splitStr, replaceStr ) {
+        var strArr = oriStr.split( splitStr ),
+            modPath = strArr[ strArr.length - 1 ];
 
+        if ( replaceStr ) {
+            modPath = modPath.replace( replaceStr, '' )
+        }
 
-
-
-
+        return modPath;
+    },
 
     /**
      * 对象合并，返回合并后的对象
