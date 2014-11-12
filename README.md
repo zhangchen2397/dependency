@@ -30,7 +30,7 @@ svn co http://svn.tencent.com/gd.svn/demo
 cd ./demo
 ```
 
-进入`demo`目录后，注意此时项目中没有`build.conf`文件，在index.jsp文件中，不管是线上还是线下jsmap都为空，且前后多我注释，如下：
+进入`demo`目录后，注意此时项目中没有`build.conf`文件，在`index.jsp`文件中，不管是线上还是线下`jsmap`都为空，且前后多我注释，如下：
 
 ```javascript
 
