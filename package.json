@@ -1,0 +1,18 @@
+{
+    "name": "generate-jsmap",
+    "version": "0.0.2",
+    "readmeFilename": "README.md",
+    "description": "Automatically generate jsmap and basic build.conf",
+    "homepage": "https://github.com/zhangchen2397/dependency.git",
+    "keywords": [ "jsmap" ],
+    "author": "zhangchen2397",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zhangchen2397/dependency.git"
+    },
+    "main": "./src/gd.js",
+    "bin": {
+        "gd": "./bin/gd"
+    },
+    "license": "MIT"
+}

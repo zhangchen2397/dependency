@@ -12,24 +12,21 @@
 
 总的来说，不需要单独手动维护`jsmap`表，而且对于大多数项目js打包要求，不需要手动编写`build.conf`配置文件。
 
-##具体使用
+##具体使用示例
 
-a. **部署代码** 
-
-```
-//将gd代码部署到E:/project/gd目录下
-svn co https://svn.tencent.com/commons/gd.svn gd
-```
-
-b. **进入项目所在目录**
+**a. 安装** 
 
 ```
-//如travel项目所有目录为：E:/project/travel
-
-cd ./project/travel
+npm install gd
 ```
 
-整体的目录结构为：
+**b. 进入示例项目所有目录**
+
+```
+cd ./gd/demo
+```
+
+该目录结构和我们项目基本一致，注意此时项目中没有`build.conf`文件，在index.jsp文件中，mtcon
 
 
 

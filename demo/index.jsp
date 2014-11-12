@@ -2,7 +2,7 @@
     <script type="text/javascript" id="file_config">
         var g_config = {
             //onlineJsmapStart
-
+            jsmap: {},
             //onlineJsmapEnd
             testEnv: false,
             staticPath: '/infocdn/wap30/info_app/travel',
@@ -19,7 +19,7 @@
     <script>
         var g_config = {
             //envJsmapStart
-
+            jsmap: {},
             //envJsmapEnd
             testEnv: true,
             staticPath: '/infoapp/travel/touch',

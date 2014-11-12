@@ -4,6 +4,8 @@
 
 var gd = require( '../src/gd.js' );
 
+var version = require( '../package.json' ).version;
+
 var args = process.argv.slice( 2 );
 
 var config = {
@@ -12,4 +14,10 @@ var config = {
     mtConfigPath: args[ 2 ] || './index.jsp',
 };
 
+if ( /-v|-version/.test( args[ 0 ] ) ) {
+    process.stdout.write( version + '\n' );
+    process.exit();
+}
+
 new gd( config );
+
