@@ -17,16 +17,68 @@
 **a. 安装** 
 
 ```
-npm install gd
+npm install generate-jsmap
 ```
 
 **b. 进入示例项目所有目录**
 
+这里准备了一个demo示例项目，该目录结构和我们项目基本一致
+
 ```
-cd ./gd/demo
+svn co http://svn.tencent.com/gd.svn/demo
+
+cd ./demo
 ```
 
-该目录结构和我们项目基本一致，注意此时项目中没有`build.conf`文件，在index.jsp文件中，mtcon
+进入`demo`目录后，注意此时项目中没有`build.conf`文件，在index.jsp文件中，不管是线上还是线下jsmap都为空，且前后多我注释，如下：
+
+```javascript
+
+<% if (!isTest) { %>
+    <script type="text/javascript" id="file_config">
+        var g_config = {
+            //onlineJsmapStart
+            jsmap: {},
+            //onlineJsmapEnd
+            testEnv: false,
+            staticPath: '/infocdn/wap30/info_app/travel',
+            serverDomain: 'http://infocdn.3g.qq.com/g/storeinc',
+            buildType: 'project',
+            storeInc: {
+                'store': true,
+                'inc': true,
+                'debug': false
+            }
+        };
+    </script>
+<% } else { %>
+    <script>
+        var g_config = {
+            //envJsmapStart
+            jsmap: {},
+            //envJsmapEnd
+            testEnv: true,
+            staticPath: '/infoapp/travel/touch',
+            buildType: 'project',
+            storeInc: {
+                'store': false,
+                'inc': false,
+                'debug': true
+            }
+        };
+    </script>
+<% } %>
+```
+
+`jsmap`前后的注释不要删除，是用来自动生成jsmap的标记，其余的配置和之前一样写就行。这样后续开发或上线都不需要手动添加`jsmap`了。
+
+**运行**
+
+如目录结构和demo示例一致，即`jsmap`及`build.conf`所在的目录都在项目的根目录下，直接运行`gd`命令即可：
+
+```
+gd
+```
 
 
 
