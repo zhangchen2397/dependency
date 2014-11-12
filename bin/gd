@@ -4,9 +4,12 @@
 
 var gd = require( '../src/gd.js' );
 
+var args = process.argv.slice( 2 );
+
 var config = {
-    jsPath: './js/',
-    buildConfPath: './build.conf'
+    basePath: args[ 0 ] || './',
+    buildConfPath: args[ 1 ] || './build.conf',
+    mtConfigPath: args[ 2 ] || './index.jsp',
 };
 
 new gd( config );

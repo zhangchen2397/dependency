@@ -4,14 +4,15 @@ var fs = require( 'fs' ),
     events = require( 'events' );
 
 var beautify = require( 'js-beautify' ),
-    path = require( './path' );
+    path = require( './path' ),
+    watch = require('watch');
 
 var gd = function( config ) {
 
     this.defaultConf = {
         basePath: './',
         buildConfPath: './build.conf',
-        outputPath: './index.jsp',
+        mtConfigPath: './index.jsp',
         charset: 'utf-8'
     };
 
@@ -33,14 +34,99 @@ gd.prototype = {
 
     init: function() {
         this._initEvent();
+        this.gd();
+    },
+
+    gd: function() {
+        var time = ( new Date ).toLocaleTimeString();
+
+        this.envJsMap = {};
+        this.onlineJsMap = {};
+
+        this._checkBuildConfExist();
         this.setOnlineJsMap();
         this.setEnvJsMap();
         this._writeConfig();
+
+        console.log( time + ' generate dependency success!' );
+        console.log( '-------------------------------------' );
     },
 
     _initEvent: function() {
         var me = this,
             config = this.config;
+
+        watch.watchTree( config.basePath, function ( f, curr, prev ) {
+            if ( typeof f == "object" && prev === null && curr === null ) {
+                //全部遍历完
+                //console.log( 'no change' );
+            } else if ( prev === null ) {
+                //新增文件或文件夹
+                if ( me.filter( f ) ) {
+                    console.log( 'add new file: ' + path.basename( f ) );
+                    me.gd();
+                }
+            } else if (curr.nlink === 0) {
+                //删除文件或文件夹
+                if ( me.filterExtname( path.extname( f ) ) ) {
+                    console.log( 'delete file: ' + path.basename( f ) );
+                    fs.existsSync( f ) && fs.unlinkSync( f );
+                    me.gd();
+                }
+            } else {
+                //更新文件
+                if ( /build\.conf/.test( f ) ) {
+                    console.log( 'update build.conf' );
+                    me.gd();
+                }
+            }
+        } );
+    },
+
+    _checkBuildConfExist: function() {
+        var me = this,
+            config = this.config;
+
+        if ( !fs.existsSync( config.buildConfPath ) ) {
+            this._writeBuildConf();
+        }
+    },
+
+    _writeBuildConf: function() {
+        var me = this,
+            config = this.config;
+
+        var defaultConf = {
+            './release/{pv}/base-{fv}.js': {
+                'files': [],
+                'fvName': 'base.js'
+            },
+
+            'pages': {
+                'dir': './js/pages',
+                'releaseDir': './release/{pv}/pages/'
+            }
+        };
+
+        var walk = function( dir ) {
+            var dirList = fs.readdirSync( dir );
+
+            dirList.forEach( function( item ) {
+                var fullPath = path.join( dir, item );
+
+                if ( fs.statSync( path.join( dir, item ) ).isDirectory()) {
+                    walk( fullPath );
+                } else if ( me.filterExtname( item ) && !/pages/.test( fullPath ) ) {
+                    defaultConf[ './release/{pv}/base-{fv}.js' ][ 'files' ].push( fullPath );
+                }
+            } );
+        };
+
+        walk( config.basePath );
+
+        fs.writeFileSync( config.buildConfPath, beautify( JSON.stringify( defaultConf ) ), {
+            encoding: config.charset
+        } );
     },
 
     _writeConfig: function() {
@@ -49,7 +135,7 @@ gd.prototype = {
             envJsMap = this.envJsMap,
             onlineJsMap = this.onlineJsMap;
 
-        var configFile = fs.readFileSync( config.outputPath, {
+        var configFile = fs.readFileSync( config.mtConfigPath, {
             encoding: config.charset
         } );
 
@@ -69,7 +155,7 @@ gd.prototype = {
                 'jsmap: ' + envJsMap + ',\n\r' +
             '//envJsmapEnd' );
 
-        fs.writeFileSync( config.outputPath, newStr, {
+        fs.writeFileSync( config.mtConfigPath, newStr, {
             encoding: config.charset
         } );
     },
@@ -158,10 +244,17 @@ gd.prototype = {
             var dirList = fs.readdirSync( dir );
 
             dirList.forEach( function( item ) {
+                var fullPath = path.join( dir, item ),
+                    jsPath = '/' + path.join( dir, item );
+
+                if ( typeJsMap == 'onlineJsMap' ) {
+                    jsPath = '/pages/' + item;
+                }
+
                 if ( fs.statSync( path.join( dir, item ) ).isDirectory()) {
-                    walk( path.join( dir, item ) );
+                    walk( fullPath );
                 } else if ( me.filterExtname( item ) ) {
-                    me[ typeJsMap ][ item.replace( /\.js/, '' ) ] = '/pages/' + item;
+                    me[ typeJsMap ][ item.replace( /\.js/, '' ) ] = jsPath;
                 }
             } );
         };
@@ -173,6 +266,25 @@ gd.prototype = {
         // 支持的后缀名
         var EXTNAME_REG = /\.js$/i;
         return EXTNAME_REG.test( name );
+    },
+
+    /**
+     * 文件与路径筛选器
+     * @param   {String}    文件路径
+     * @return  {Boolean}
+     */
+    filter: function( file ) {
+        if ( fs.existsSync( file ) ) {
+            var stat = fs.statSync( file );
+
+            if ( stat.isDirectory() ) {
+                return false;
+            } else {
+                return this.filterExtname( path.extname( file ) );
+            }
+        } else {
+            return false;
+        }
     },
 
     /**
@@ -210,9 +322,3 @@ gd.prototype = {
 };
 
 module.exports = gd;
-
-
-
-
-
-
