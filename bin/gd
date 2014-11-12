@@ -9,9 +9,8 @@ var version = require( '../package.json' ).version;
 var args = process.argv.slice( 2 );
 
 var config = {
-    basePath: args[ 0 ] || './',
-    buildConfPath: args[ 1 ] || './build.conf',
-    mtConfigPath: args[ 2 ] || './index.jsp',
+    buildConfPath: args[ 0 ] || './build.conf',
+    mtConfigPath: args[ 1 ] || './index.jsp',
 };
 
 if ( /-v|-version/.test( args[ 0 ] ) ) {
