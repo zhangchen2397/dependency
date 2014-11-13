@@ -144,9 +144,9 @@ project
 
 ```javascript
 define( 'page/home', [ 
-    'common:lib/zepto',  //引入common模块lib/zepto
-    'common:mod/tips',   //引入common模块mod/tips
-    'mod/lazyload'       //引入当前模块mod/lazyload
+    'common:lib/zepto',  //引入common模块下的 lib/zepto
+    'common:mod/tips',   //引入common模块下的 mod/tips
+    'mod/lazyload'       //引入当前模块下的 mod/lazyload
 ], function( $, tips, lazyload ) {
     console.log( $ );
     console.log( tips );
@@ -155,5 +155,4 @@ define( 'page/home', [
 ```
 
 以上仅是个人意见和想法，具体还需要组内一起讨论。
-
 
