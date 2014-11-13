@@ -17,7 +17,7 @@
 **a. 安装** 
 
 ```
-npm install generate-jsmap
+npm install generate-jsmap -g
 ```
 
 **b. 进入示例项目所有目录**
@@ -72,11 +72,9 @@ cd ./demo
 
 `jsmap`前后的注释不要删除，是用来自动生成`jsmap`的标记，其余的配置和之前一样写就行。这样后续开发或上线都不需要手动添加`jsmap`了。
 
-**c. 运行命令**
+**c. 运行命令`gd`**
 
-gd []
-
-如目录结构和demo示例一致，即`jsmap`及`build.conf`所在的目录都在项目的根目录下，直接运行`gd`命令即可：
+如目录结构和demo示例一致，即`jsmap`所在的`index.jsp`及`build.conf`所在的目录都在项目的根目录下，直接运行`gd`命令即可：
 
 ```
 //在demo目录下直接运行`gd`命令
@@ -87,17 +85,17 @@ gd
 
 如项目打包比较复杂，直接修改`build.conf`，`jsmap`会同步自动更新
 
-
 **d. 更多使用示例**
 
 如`jsmap`不在`index.jsp`中，或`build.conf`不在项目所在目录下，通过`gd`参数也可以单独指定
 
 ```
-dg ./mt_config.jsp ./conf/build.conf
+gd ./mt_config.jsp ./conf/build.conf
 ```
 
 注：路径均相对于运行当前命令所在目录。
 
+##更多todo list
 
 
 
