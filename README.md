@@ -100,9 +100,9 @@ gd ./conf/build.conf ./mt_config.jsp
 
 注：路径均相对于运行当前命令所在目录。
 
-##更多todo list(YY)
+##更多todo list (YY)
 
-这个还需要组内一起讨论，如此前会上所讨论的，将公共模块放在svn独立的`common`路径下，和项目开发路径平级存放，如下：
+这个需要组内一起讨论，如此前会上所讨论的，将公共模块放在svn独立的`common`路径下，和项目开发路径平级存放，如下：
 
 ```html
 project
@@ -119,18 +119,18 @@ project
     |     |     ├── swipe
     |     |     ├── flipsnap
     |     |     └── tab
-    |     └── component ............... 手腾独立开发组件
+    |     └── mod ..................... 手腾独立开发组件
     |           ├── comment
     |           ├── dialog
     |           └── tips
     |       
     ├── travel ......................... 旅游项目目录结构
     |     ├── js
-    |     |     ├── mods ............... 当前项目通用模块
+    |     |     ├── mod ................ 当前项目通用模块
     |     |     |    ├── fullimg
     |     |     |    ├── lazyload
     |     |     |    └── more
-    |     |     └── pages .............. 页面级运行时文件
+    |     |     └── page ............... 页面级运行时文件
     |     |          ├── home
     |     |          ├── list
     |     |          └── more
@@ -140,6 +140,20 @@ project
     └── movie
 ```
 
+有了以上这种规范的目录结构后，借助模块加载器可以非常方便的分析依赖，而且在引用一个通用组件时，不需要关注它所依赖的其他组件，直接引用即可，也无需通过`svn external`将通用模块外链到当前项目中来，如：
 
+```javascript
+define( 'page/home', [ 
+    'common:lib/zepto',  //引入common模块lib/zepto
+    'common:mod/tips',   //引入common模块mod/tips
+    'mod/lazyload'       //引入当前模块mod/lazyload
+], function( $, tips, lazyload ) {
+    console.log( $ );
+    console.log( tips );
+    console.log( lazyload );
+} );
+```
+
+以上仅是个人意见和想法，具体还需要组内一起讨论。
 
 
