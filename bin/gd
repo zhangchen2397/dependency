@@ -2,7 +2,8 @@
 
 'use strict';
 
-var gd = require( '../src/gd.js' );
+var fs = require( 'fs' ),
+    gd = require( '../src/gd.js' );
 
 var version = require( '../package.json' ).version;
 
@@ -15,6 +16,11 @@ var config = {
 
 if ( /-v|-version/.test( args[ 0 ] ) ) {
     process.stdout.write( version + '\n' );
+    process.exit();
+}
+
+if ( !fs.existsSync( config.mtConfigPath ) ) {
+    process.stdout.write( 'mtConfigPath no exists!' + '\n' );
     process.exit();
 }
 
