@@ -100,7 +100,7 @@ gd ./conf/build.conf ./mt_config.jsp
 
 当`build.conf`有修改或有增加删除js文件时，终端实时提示生成jsmap是否成功或失败，如：
 
-![demo]( /assets/images/jian.jpg "demo" )
+![demo]( http://zhangchen2397.github.io/dependency/doc/demo.png "demo" )
 
 注：路径均相对于运行当前命令所在目录。
 
