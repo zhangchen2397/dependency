@@ -74,10 +74,15 @@ cd ./demo
 
 **c. 运行命令`gd`**
 
+```
+gd [buildConfPath] [jsmapPath]
+```
+
 如目录结构和demo示例一致，即`jsmap`所在的`index.jsp`及`build.conf`所在的目录都在项目的根目录下，直接运行`gd`命令即可：
 
 ```
 //在demo目录下直接运行`gd`命令
+
 gd
 ```
 
@@ -90,12 +95,51 @@ gd
 如`jsmap`不在`index.jsp`中，或`build.conf`不在项目所在目录下，通过`gd`参数也可以单独指定
 
 ```
-gd ./mt_config.jsp ./conf/build.conf
+gd ./conf/build.conf ./mt_config.jsp 
 ```
 
 注：路径均相对于运行当前命令所在目录。
 
-##更多todo list
+##更多todo list(YY)
+
+这个还需要组内一起讨论，如此前会上所讨论的，将公共模块放在svn独立的`common`路径下，和项目开发路径平级存放，如下：
+
+```html
+project
+    ├── common .......................  通用模块目录结构
+    |     ├── base .................... MT基础库
+    |     |     ├── core
+    |     |     ├── pm
+    |     |     └── storeinc
+    |     ├── lib ..................... 底层库
+    |     |     ├── zepto
+    |     |     ├── fastclick
+    |     |     └── iscroll
+    |     ├── vendor .................. 第三方开源组件
+    |     |     ├── swipe
+    |     |     ├── flipsnap
+    |     |     └── tab
+    |     └── component ............... 手腾独立开发组件
+    |           ├── comment
+    |           ├── dialog
+    |           └── tips
+    |       
+    ├── travel ......................... 旅游项目目录结构
+    |     ├── js
+    |     |     ├── mods ............... 当前项目通用模块
+    |     |     |    ├── fullimg
+    |     |     |    ├── lazyload
+    |     |     |    └── more
+    |     |     └── pages .............. 页面级运行时文件
+    |     |          ├── home
+    |     |          ├── list
+    |     |          └── more
+    |     ├── index.jsp
+    |     └── build.conf
+    |
+    └── movie
+```
+
 
 
 
