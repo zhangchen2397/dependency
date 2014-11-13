@@ -1,6 +1,6 @@
 {
     "name": "generate-jsmap",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "readmeFilename": "README.md",
     "description": "Automatically generate jsmap and basic build.conf",
     "homepage": "https://github.com/zhangchen2397/dependency.git",

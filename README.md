@@ -95,8 +95,12 @@ gd
 如`jsmap`不在`index.jsp`中，或`build.conf`不在项目所在目录下，通过`gd`参数也可以单独指定
 
 ```
-gd ./conf/build.conf ./mt_config.jsp 
+gd ./conf/build.conf ./mt_config.jsp
 ```
+
+当`build.conf`有修改或有增加删除js文件时，终端实时提示生成jsmap是否成功或失败，如：
+
+![demo]( /assets/images/jian.jpg "demo" )
 
 注：路径均相对于运行当前命令所在目录。
 
