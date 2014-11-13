@@ -19,4 +19,3 @@ if ( /-v|-version/.test( args[ 0 ] ) ) {
 }
 
 new gd( config );
-

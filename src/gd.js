@@ -5,7 +5,7 @@ var fs = require( 'fs' ),
 
 var beautify = require( 'js-beautify' ),
     path = require( './path' ),
-    watch = require('watch');
+    watch = require( 'watch' );
 
 var gd = function( config ) {
 
