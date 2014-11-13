@@ -25,9 +25,9 @@ npm install generate-jsmap -g
 这里准备了一个demo示例项目，该目录结构和我们项目基本一致
 
 ```
-svn co http://svn.tencent.com/gd.svn/demo
+git clone https://github.com/zhangchen2397/dependency.git
 
-cd ./demo
+cd ./dependency/demo
 ```
 
 进入`demo`目录后，注意此时项目中没有`build.conf`文件，在`index.jsp`文件中，不管是线上还是线下`jsmap`都为空，且前后多我注释，如下：
