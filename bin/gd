@@ -14,7 +14,7 @@ var config = {
     mtConfigPath: args[ 1 ] || './index.jsp'
 };
 
-if ( /-v|-version/.test( args[ 0 ] ) ) {
+if ( /-v|-version/.test( args[ 0 ] ) )  {
     process.stdout.write( version + '\n' );
     process.exit();
 }
